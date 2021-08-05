@@ -13,7 +13,6 @@ object MainForm: TMainForm
   Menu = Menu
   OldCreateOrder = False
   WindowState = wsMaximized
-  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object SB: TStatusBar
@@ -62,6 +61,9 @@ object MainForm: TMainForm
       object AuthMenu: TMenuItem
         Action = AuthAction
       end
+      object SearchMenu: TMenuItem
+        Action = SearchAction
+      end
     end
   end
   object AL: TActionList
@@ -73,6 +75,12 @@ object MainForm: TMainForm
       Caption = '&'#1040#1074#1090#1086#1088#1080#1079#1072#1094#1080#1103
       ImageIndex = 14
       OnExecute = AuthActionExecute
+    end
+    object SearchAction: TAction
+      Category = 'Moduls'
+      Caption = '&'#1055#1086#1080#1089#1082' '#1080#1075#1088#1086#1082#1086#1074
+      ImageIndex = 35
+      OnExecute = SearchActionExecute
     end
   end
   object AppEvents: TApplicationEvents

@@ -178,7 +178,7 @@ procedure TAuthForm.ParseAuth(strJSON: string);
 var
   JSON: TJSONObject;
 begin
- JSON := JSON.ParseJSONValue(strJSON) as TJSONObject;
+ JSON := TJSONObject.ParseJSONValue(strJSON) as TJSONObject;
 
   try
     locationRedirect := ((JSON.Get('data').JsonValue as TJSONObject).Get('location')).JsonValue.Value;

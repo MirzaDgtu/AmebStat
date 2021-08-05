@@ -1,9 +1,10 @@
 object SearchForm: TSearchForm
   Left = 0
   Top = 0
+  BorderStyle = bsToolWindow
   Caption = 'SearchForm'
-  ClientHeight = 250
-  ClientWidth = 316
+  ClientHeight = 465
+  ClientWidth = 342
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,12 +12,24 @@ object SearchForm: TSearchForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 0
+    Top = 331
+    Width = 342
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitTop = 116
+    ExplicitWidth = 137
+  end
   object SearchGB: TGroupBox
     Left = 0
     Top = 0
-    Width = 316
+    Width = 342
     Height = 116
     Align = alTop
     Caption = '&'#1055#1072#1088#1072#1084#1077#1090#1088#1099' '#1087#1086#1080#1089#1082#1072
@@ -27,12 +40,27 @@ object SearchForm: TSearchForm
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 0
+    ExplicitTop = -6
+    ExplicitWidth = 341
     object Label1: TLabel
-      Left = 202
+      Left = 209
       Top = 16
       Width = 40
       Height = 13
       Caption = '&'#1056#1077#1075#1080#1086#1085
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 207
+      Top = 63
+      Width = 68
+      Height = 13
+      Caption = '&'#1050#1086#1083#1080#1095#1077#1089#1090#1074#1086
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clRed
       Font.Height = -11
@@ -57,9 +85,9 @@ object SearchForm: TSearchForm
       TabOrder = 0
     end
     object RegionCB: TComboBox
-      Left = 202
+      Left = 207
       Top = 32
-      Width = 109
+      Width = 127
       Height = 22
       Style = csOwnerDrawFixed
       ItemIndex = 1
@@ -81,10 +109,10 @@ object SearchForm: TSearchForm
         '"ko" '#8212' '#54620#44397#50612)
     end
     object SearchBtn: TBitBtn
-      Left = 217
-      Top = 67
-      Width = 75
-      Height = 30
+      Left = 221
+      Top = 88
+      Width = 92
+      Height = 22
       Caption = '&'#1053#1072#1081#1090#1080
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -114,6 +142,7 @@ object SearchForm: TSearchForm
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
       TabOrder = 2
+      OnClick = SearchBtnClick
     end
     object SwichRBG: TRadioGroup
       Left = 16
@@ -135,7 +164,10 @@ object SearchForm: TSearchForm
       Width = 126
       Height = 17
       Caption = '&'#1085#1072#1095#1072#1083#1091' '#1085#1080#1082#1085#1077#1081#1084#1072
+      Checked = True
       TabOrder = 4
+      TabStop = True
+      OnClick = StartsRBtnClick
     end
     object ExactRBtn: TRadioButton
       Left = 24
@@ -144,14 +176,75 @@ object SearchForm: TSearchForm
       Height = 17
       Caption = '&'#1087#1086#1083#1085#1086#1084#1091' '#1085#1080#1082#1085#1077#1081#1084#1091
       TabOrder = 5
+      OnClick = ExactRBtnClick
+    end
+    object LimitSpEdit: TSpinEdit
+      Left = 290
+      Top = 60
+      Width = 44
+      Height = 22
+      MaxValue = 100
+      MinValue = 1
+      TabOrder = 6
+      Value = 10
     end
   end
   object BottomPanel: TPanel
     Left = 0
-    Top = 216
-    Width = 316
+    Top = 431
+    Width = 342
     Height = 34
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 216
+    ExplicitWidth = 316
+  end
+  object LogMemo: TMemo
+    Left = 0
+    Top = 334
+    Width = 342
+    Height = 97
+    Align = alBottom
+    ScrollBars = ssBoth
+    TabOrder = 2
+    ExplicitWidth = 341
+  end
+  object DataGrid: TStringGrid
+    Left = 0
+    Top = 116
+    Width = 342
+    Height = 215
+    Align = alClient
+    ColCount = 3
+    DefaultColWidth = 120
+    DrawingStyle = gdsGradient
+    FixedCols = 0
+    RowCount = 2
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+  end
+  object NetClient: TNetHTTPClient
+    Asynchronous = False
+    ConnectionTimeout = 60000
+    ResponseTimeout = 60000
+    HandleRedirects = True
+    AllowCookies = True
+    UserAgent = 'Embarcadero URI Client/1.0'
+    Left = 281
+    Top = 120
+  end
+  object NetRequest: TNetHTTPRequest
+    Asynchronous = True
+    ConnectionTimeout = 60000
+    ResponseTimeout = 60000
+    Client = NetClient
+    OnRequestCompleted = NetRequestRequestCompleted
+    Left = 281
+    Top = 176
   end
 end

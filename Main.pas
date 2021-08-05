@@ -40,8 +40,10 @@ type
     IL: TImageList;
     AuthAction: TAction;
     SB: TStatusBar;
-    procedure FormCreate(Sender: TObject);
+    SearchAction: TAction;
+    SearchMenu: TMenuItem;
     procedure AuthActionExecute(Sender: TObject);
+    procedure SearchActionExecute(Sender: TObject);
   private
     FCodeErr: string;
     FMessageErr: string;
@@ -90,7 +92,7 @@ implementation
 
 {$R *.dfm}
 
-uses BrowserEmulationAdjuster, Auth, Globals, SConsts;
+uses BrowserEmulationAdjuster, Auth, Globals, SConsts, Search;
 
 { TMainForm }
 
@@ -108,9 +110,17 @@ begin
 
 end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.SearchActionExecute(Sender: TObject);
+var
+  searchF: TSearchForm;
 begin
-  // SuccessRedirectURL := '&status=ok&access_token=7b25dd5463330f871fc0d1652d6c6058adcd5834&nickname=Dr_Gladiator_AMEB&account_id=21664152&expires_at=1629310945';
+  searchF := TSearchForm.Create(Self);
+
+  try
+    searchF.ShowModal();
+  finally
+    FreeAndNil(searchF);
+  end;
 end;
 
 procedure TMainForm.Setaccess_token(const Value: String);
