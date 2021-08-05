@@ -111,6 +111,10 @@
         </DCCReference>
         <DCCReference Include="SConsts.pas"/>
         <DCCReference Include="Globals.pas"/>
+        <DCCReference Include="Search.pas">
+            <Form>SearchForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
