@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
   System.Net.URLClient, System.Net.HttpClient, System.Net.HttpClientComponent,
-  Vcl.Grids, System.JSON, ActiveX, Vcl.Samples.Spin;
+  Vcl.Grids, System.JSON, ActiveX, Vcl.Samples.Spin, Vcl.ComCtrls;
 
 const
   StartsWith = 'startswith';  // Поиск по начальной части имени игрока без учёта регистра.
@@ -27,25 +27,28 @@ type
     SwichRBG: TRadioGroup;
     StartsRBtn: TRadioButton;
     ExactRBtn: TRadioButton;
-    LogMemo: TMemo;
     NetClient: TNetHTTPClient;
     NetRequest: TNetHTTPRequest;
     Splitter1: TSplitter;
     DataGrid: TStringGrid;
     LimitSpEdit: TSpinEdit;
     Label2: TLabel;
+    SB: TStatusBar;
     procedure SearchBtnClick(Sender: TObject);
     procedure StartsRBtnClick(Sender: TObject);
     procedure ExactRBtnClick(Sender: TObject);
     procedure NetRequestRequestCompleted(const Sender: TObject;
       const AResponse: IHTTPResponse);
     procedure FormCreate(Sender: TObject);
+    procedure SBDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
+      const Rect: TRect);
   private
     FtypeSearch: string;
     { Private declarations }
     procedure SettypeSearch(const Value: string);
     procedure SetColNames(Data: TStringGrid);
-    procedure SetParamsGrid(Count: integer);
+    procedure SetDefaultParams();
+    procedure InsToGrid(Nickname, id_account: string);
     procedure ParseSearchResults(strJSON: string);
 
     function getRagion(Index: smallint): string;
@@ -98,10 +101,29 @@ begin
    end;
 end;
 
+procedure TSearchForm.InsToGrid(Nickname, id_account: string);
+var
+  index: integer;
+begin
+  if DataGrid.Cells[0,1] = EmptyStr then
+    Begin
+      DataGrid.Cells[0,1] := '1';
+      DataGrid.Cells[1,1] := Nickname;
+      DataGrid.Cells[2,1] := id_account;
+    End
+  else
+    Begin
+      index := DataGrid.RowCount + 1;
+      DataGrid.RowCount := index;
+      DataGrid.Cells[0, index-1] := (index-1).ToString;
+      DataGrid.Cells[1, index-1] := Nickname;
+      DataGrid.Cells[2, index-1] := id_account;
+    End;
+end;
+
 procedure TSearchForm.NetRequestRequestCompleted(const Sender: TObject;
   const AResponse: IHTTPResponse);
 begin
-  LogMemo.Lines.Add(AResponse.ContentAsString());
   ParseSearchResults(AResponse.ContentAsString());
 end;
 
@@ -117,21 +139,36 @@ begin
 
   try
     Count := ((JSON.Get('meta').JsonValue as TJSONObject).Get('count')).JsonValue.Value.ToInteger;
+    SB.Panels[0].Text := Format('Возвращено результатов: %d', [Count]);
     dataArr := JSON.GetValue('data') as TJSONArray;
 
     for I := 0 to Count-1 do
       Begin
         curAccount := dataArr.Items[i] as TJSONObject;
-        LogMemo.Lines.Add(curAccount.Get('nickname').JsonValue.Value + ' ' + curAccount.Get('account_id').JsonValue.Value)
+        InsToGrid(curAccount.Get('nickname').JsonValue.Value, curAccount.Get('account_id').JsonValue.Value);
       End;
   finally
-    LogMemo.Lines.Add('-------------------------------------------------------------------------');
     FreeAndNil(JSON);
   end;
 end;
 
+procedure TSearchForm.SBDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
+  const Rect: TRect);
+begin
+  with StatusBar.Canvas do
+    Begin
+       Font.Style := Font.Style + [fsBold];
+
+       if Panel = StatusBar.Panels[0] then
+         Font.Color := clTeal;
+
+       TextOut(Rect.Left, Rect.Top, Panel.Text);
+    end;
+end;
+
 procedure TSearchForm.SearchBtnClick(Sender: TObject);
 begin
+   SetDefaultParams;
    SearchReq(AppKey, NikcknameLE.Text, getRagion(RegionCB.ItemIndex), LimitSpEdit.Value.ToString, typeSearch);
 end;
 
@@ -140,6 +177,12 @@ function TSearchForm.SearchReq(l_AppKey, l_NickName, l_language, l_limit,
 var
   strReq: string;
 begin
+  if l_NickName.IsEmpty then
+    Begin
+      raise Exception.Create('Никнейм не должен быть пустым.' + #13 + 'Пожалуйста заполните соответствующее поле.');
+      Exit;
+    End;
+
   strReq := Format(SearchURL, [l_AppKey,
                                l_NickName,
                                l_language,
@@ -150,7 +193,6 @@ begin
     NetRequest.URL := strReq;
     NetRequest.Execute();
   finally
-    LogMemo.Lines.Add(strReq);
   end;
 end;
 
@@ -165,19 +207,15 @@ begin
   Data.ColWidths[2] := 147;
 end;
 
-procedure TSearchForm.SetParamsGrid(Count: integer);
+procedure TSearchForm.SetDefaultParams;
 var
-  i: Integer;
-  j: Integer;
+  j, i: Integer;
 begin
+  for I := 0 to DataGrid.ColCount-1 do
+    for j := 0 to DataGrid.RowCount - 1 do
+      DataGrid.Cells[i,j] := EmptyStr;
 
-  for i := 0 to DataGrid.ColCount-1 do
-    for j := 0 to DataGrid.RowCount-1 do
-     DataGrid.Cells[i,j].Empty;
-
-  DataGrid.ColCount := 3;
-  DataGrid.RowCount := Count;
-
+  DataGrid.RowCount := 2;
   SetColNames(DataGrid);
 end;
 

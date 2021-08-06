@@ -2,7 +2,7 @@ object SearchForm: TSearchForm
   Left = 0
   Top = 0
   BorderStyle = bsToolWindow
-  Caption = 'SearchForm'
+  Caption = #1055#1086#1080#1089#1082' '#1080#1075#1088#1086#1082#1086#1074
   ClientHeight = 465
   ClientWidth = 342
   Color = clBtnFace
@@ -18,7 +18,7 @@ object SearchForm: TSearchForm
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 331
+    Top = 428
     Width = 342
     Height = 3
     Cursor = crVSplit
@@ -114,6 +114,7 @@ object SearchForm: TSearchForm
       Width = 92
       Height = 22
       Caption = '&'#1053#1072#1081#1090#1080
+      Default = True
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -199,21 +200,11 @@ object SearchForm: TSearchForm
     ExplicitTop = 216
     ExplicitWidth = 316
   end
-  object LogMemo: TMemo
-    Left = 0
-    Top = 334
-    Width = 342
-    Height = 97
-    Align = alBottom
-    ScrollBars = ssBoth
-    TabOrder = 2
-    ExplicitWidth = 341
-  end
   object DataGrid: TStringGrid
     Left = 0
     Top = 116
     Width = 342
-    Height = 215
+    Height = 293
     Align = alClient
     ColCount = 3
     DefaultColWidth = 120
@@ -226,7 +217,26 @@ object SearchForm: TSearchForm
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 2
+    ExplicitHeight = 215
+  end
+  object SB: TStatusBar
+    Left = 0
+    Top = 409
+    Width = 342
+    Height = 19
+    Panels = <
+      item
+        Style = psOwnerDraw
+        Width = 200
+      end
+      item
+        Width = 200
+      end>
+    OnDrawPanel = SBDrawPanel
+    ExplicitLeft = 176
+    ExplicitTop = 240
+    ExplicitWidth = 0
   end
   object NetClient: TNetHTTPClient
     Asynchronous = False
