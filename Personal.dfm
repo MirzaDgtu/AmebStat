@@ -159,7 +159,7 @@ object PersonalForm: TPersonalForm
     OnOpened = SVOpened
     OnOpening = SVOpening
     object catMenuItems: TCategoryButtons
-      Left = 1
+      Left = 0
       Top = -20
       Width = 194
       Height = 269
@@ -218,6 +218,40 @@ object PersonalForm: TPersonalForm
     Height = 571
     Align = alClient
     TabOrder = 3
+    inline GarageFrame1: TGarageFrame
+      Left = 1
+      Top = 1
+      Width = 658
+      Height = 569
+      Align = alClient
+      TabOrder = 0
+      ExplicitLeft = -202
+      ExplicitTop = -86
+      inherited SB: TStatusBar
+        Top = 550
+        Width = 658
+        ExplicitLeft = 0
+        ExplicitTop = 638
+        ExplicitWidth = 862
+      end
+      inherited ParamsPanel: TPanel
+        Left = 508
+        Height = 509
+        ExplicitTop = 41
+        ExplicitHeight = 597
+      end
+      inherited TopPanel: TPanel
+        Width = 658
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 862
+      end
+      inherited DataLV: TListView
+        Width = 508
+        Height = 509
+        ExplicitTop = 41
+      end
+    end
   end
   object imlIcons: TImageList
     ColorDepth = cd32Bit
@@ -1816,5 +1850,9 @@ object PersonalForm: TPersonalForm
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object AL: TActionList
+    Left = 96
+    Top = 400
   end
 end

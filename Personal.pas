@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons,
   Vcl.WinXCtrls, Vcl.ComCtrls, Vcl.CategoryButtons, System.ImageList,
-  Vcl.ImgList;
+  Vcl.ImgList, Garage, System.Actions, Vcl.ActnList;
 
 const
   // Extra Список дополнительных полей, которые будут включены в ответ.
@@ -45,6 +45,8 @@ type
     catMenuItems: TCategoryButtons;
     imlIcons: TImageList;
     FramePanel: TPanel;
+    GarageFrame1: TGarageFrame;
+    AL: TActionList;
     procedure MenuBtnClick(Sender: TObject);
     procedure catMenuItemsCategoryCollapase(Sender: TObject;
       const Category: TButtonCategory);
