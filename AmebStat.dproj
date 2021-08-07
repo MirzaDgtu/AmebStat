@@ -115,6 +115,15 @@
             <Form>SearchForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Personal.pas">
+            <Form>PersonalForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Garage.pas">
+            <Form>GarageFrame</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

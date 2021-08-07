@@ -64,6 +64,9 @@ object MainForm: TMainForm
       object SearchMenu: TMenuItem
         Action = SearchAction
       end
+      object N1: TMenuItem
+        Action = PersonAction
+      end
     end
   end
   object AL: TActionList
@@ -81,6 +84,12 @@ object MainForm: TMainForm
       Caption = '&'#1055#1086#1080#1089#1082' '#1080#1075#1088#1086#1082#1086#1074
       ImageIndex = 35
       OnExecute = SearchActionExecute
+    end
+    object PersonAction: TAction
+      Category = 'Moduls'
+      Caption = '&'#1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086#1073' '#1080#1075#1088#1086#1082#1077
+      ImageIndex = 1
+      OnExecute = PersonActionExecute
     end
   end
   object AppEvents: TApplicationEvents

@@ -42,8 +42,11 @@ type
     SB: TStatusBar;
     SearchAction: TAction;
     SearchMenu: TMenuItem;
+    PersonAction: TAction;
+    N1: TMenuItem;
     procedure AuthActionExecute(Sender: TObject);
     procedure SearchActionExecute(Sender: TObject);
+    procedure PersonActionExecute(Sender: TObject);
   private
     FCodeErr: string;
     FMessageErr: string;
@@ -92,7 +95,7 @@ implementation
 
 {$R *.dfm}
 
-uses BrowserEmulationAdjuster, Auth, Globals, SConsts, Search;
+uses BrowserEmulationAdjuster, Auth, Globals, SConsts, Search, Personal;
 
 { TMainForm }
 
@@ -108,6 +111,19 @@ begin
     FreeAndNil(AuthF);
   end;
 
+end;
+
+procedure TMainForm.PersonActionExecute(Sender: TObject);
+var
+  personF: TPersonalForm;
+begin
+  personF := TPersonalForm.Create(Self);
+
+  try
+    personF.ShowModal;
+  finally
+    FreeAndNil(personF);
+  end;
 end;
 
 procedure TMainForm.SearchActionExecute(Sender: TObject);
