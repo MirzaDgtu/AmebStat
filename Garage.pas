@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ExtCtrls;
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ExtCtrls,
+  Vcl.Imaging.jpeg;
 
 const
   // Знаки классности
@@ -17,10 +18,7 @@ const
   MachinesURL = 'https://api.worldoftanks.ru/wot/account/tanks/?application_id=%s&account_id=%s&language=%s&access_token=%s';
 type
   TGarageFrame = class(TFrame)
-    SB: TStatusBar;
-    ParamsPanel: TPanel;
-    TopPanel: TPanel;
-    DataLV: TListView;
+    BackGroundImage: TImage;
   private
     { Private declarations }
     function getDegree(index: byte): String;

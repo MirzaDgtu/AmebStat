@@ -174,7 +174,7 @@ object PersonalForm: TPersonalForm
           Collapsed = False
           Items = <
             item
-              Caption = '&'#1040#1085#1075#1072#1088
+              Caption = '&'#1059#1082#1088#1077#1087#1088#1072#1081#1086#1085
               ImageIndex = 2
             end
             item
@@ -218,38 +218,36 @@ object PersonalForm: TPersonalForm
     Height = 571
     Align = alClient
     TabOrder = 3
-    inline GarageFrame1: TGarageFrame
+    inline GarageF: TGarageFrame
       Left = 1
       Top = 1
       Width = 658
       Height = 569
       Align = alClient
       TabOrder = 0
-      ExplicitLeft = -202
-      ExplicitTop = -86
-      inherited SB: TStatusBar
-        Top = 550
+      Visible = False
+      ExplicitLeft = 1
+      ExplicitTop = 1
+      ExplicitWidth = 658
+      ExplicitHeight = 569
+      inherited BackGroundImage: TImage
         Width = 658
-        ExplicitLeft = 0
-        ExplicitTop = 638
-        ExplicitWidth = 862
+        Height = 569
       end
-      inherited ParamsPanel: TPanel
-        Left = 508
-        Height = 509
-        ExplicitTop = 41
-        ExplicitHeight = 597
-      end
-      inherited TopPanel: TPanel
+    end
+    inline RandomF: TRandomFormFrame
+      Left = 1
+      Top = 1
+      Width = 658
+      Height = 569
+      Align = alClient
+      TabOrder = 1
+      Visible = False
+      ExplicitLeft = 6
+      ExplicitTop = -5
+      inherited BackGroundImage: TImage
         Width = 658
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 862
-      end
-      inherited DataLV: TListView
-        Width = 508
-        Height = 509
-        ExplicitTop = 41
+        Height = 569
       end
     end
   end

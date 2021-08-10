@@ -1,4 +1,4 @@
-object GarageFrame: TGarageFrame
+object RandomFormFrame: TRandomFormFrame
   Left = 0
   Top = 0
   Width = 654
@@ -11398,9 +11398,6 @@ object GarageFrame: TGarageFrame
       572AC173F06C967E73678AE7CD51C4D8798B73E0F92E6B3F3179AB956F05B9F3
       BB259F9D23CFD1FF00D2B1FFD9}
     Stretch = True
-    ExplicitLeft = 272
-    ExplicitTop = 240
-    ExplicitWidth = 105
-    ExplicitHeight = 105
+    ExplicitHeight = 597
   end
 end

@@ -9,7 +9,8 @@ uses
   Globals in 'Globals.pas',
   Search in 'Search.pas' {SearchForm},
   Personal in 'Personal.pas' {PersonalForm},
-  Garage in 'Garage.pas' {GarageFrame: TFrame};
+  Garage in 'Garage.pas' {GarageFrame: TFrame},
+  RandomFrame in 'RandomFrame.pas' {RandomFormFrame: TFrame};
 
 {$R *.res}
 
