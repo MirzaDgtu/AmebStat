@@ -1,9 +1,10 @@
 object PersonalForm: TPersonalForm
   Left = 0
   Top = 0
+  BorderStyle = bsToolWindow
   Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086#1073' '#1080#1075#1088#1086#1082#1077
-  ClientHeight = 625
-  ClientWidth = 860
+  ClientHeight = 771
+  ClientWidth = 1064
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,10 +17,11 @@ object PersonalForm: TPersonalForm
   object TopPanel: TPanel
     Left = 0
     Top = 0
-    Width = 860
+    Width = 1064
     Height = 35
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 1054
     object MenuBtn: TBitBtn
       Left = 1
       Top = 1
@@ -131,8 +133,8 @@ object PersonalForm: TPersonalForm
   end
   object SB: TStatusBar
     Left = 0
-    Top = 606
-    Width = 860
+    Top = 752
+    Width = 1064
     Height = 19
     Panels = <
       item
@@ -144,12 +146,14 @@ object PersonalForm: TPersonalForm
       item
         Width = 50
       end>
+    ExplicitTop = 742
+    ExplicitWidth = 1054
   end
   object SV: TSplitView
     Left = 0
     Top = 35
     Width = 200
-    Height = 571
+    Height = 717
     CloseStyle = svcCompact
     Color = clBlack
     OpenedWidth = 200
@@ -158,6 +162,7 @@ object PersonalForm: TPersonalForm
     OnClosed = SVClosed
     OnOpened = SVOpened
     OnOpening = SVOpening
+    ExplicitHeight = 707
     object catMenuItems: TCategoryButtons
       Left = 0
       Top = -20
@@ -214,40 +219,47 @@ object PersonalForm: TPersonalForm
   object FramePanel: TPanel
     Left = 200
     Top = 35
-    Width = 660
-    Height = 571
+    Width = 864
+    Height = 717
     Align = alClient
     TabOrder = 3
+    ExplicitWidth = 854
+    ExplicitHeight = 707
     inline GarageF: TGarageFrame
       Left = 1
       Top = 1
-      Width = 658
-      Height = 569
+      Width = 862
+      Height = 715
       Align = alClient
       TabOrder = 0
-      Visible = False
       ExplicitLeft = 1
       ExplicitTop = 1
-      ExplicitWidth = 658
-      ExplicitHeight = 569
+      ExplicitWidth = 852
+      ExplicitHeight = 705
       inherited BackGroundImage: TImage
-        Width = 658
-        Height = 569
+        Width = 862
+        Height = 715
+        ExplicitWidth = 852
+        ExplicitHeight = 705
       end
     end
     inline RandomF: TRandomFormFrame
       Left = 1
       Top = 1
-      Width = 658
-      Height = 569
+      Width = 862
+      Height = 715
       Align = alClient
       TabOrder = 1
       Visible = False
-      ExplicitLeft = 6
-      ExplicitTop = -5
+      ExplicitLeft = 1
+      ExplicitTop = 1
+      ExplicitWidth = 852
+      ExplicitHeight = 705
       inherited BackGroundImage: TImage
-        Width = 658
-        Height = 569
+        Width = 862
+        Height = 715
+        ExplicitWidth = 852
+        ExplicitHeight = 705
       end
     end
   end
