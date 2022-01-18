@@ -6,7 +6,9 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
   Vcl.OleCtrls, SHDocVw, System.Net.URLClient, System.Net.HttpClient,
-  System.Net.HttpClientComponent, System.JSON, Vcl.Buttons, ActiveX;
+  System.Net.HttpClientComponent, System.JSON, Vcl.Buttons, ActiveX,
+  System.ImageList, Vcl.ImgList, System.Actions, Vcl.ActnList, Vcl.ComCtrls,
+  Vcl.ToolWin, System.DateUtils, System.StrUtils;
 
 
 
@@ -32,10 +34,23 @@ type
     Expires_AtEdit: TEdit;
     NetClient: TNetHTTPClient;
     NetRequest: TNetHTTPRequest;
-    AuthBtn: TBitBtn;
     SaveLogBtn: TBitBtn;
     OpenLogBtn: TBitBtn;
     ClearLogBtn: TBitBtn;
+    AL: TActionList;
+    AuthAction: TAction;
+    IL: TImageList;
+    SaveParamsAction: TAction;
+    LoadParamsAction: TAction;
+    SaveLogAction: TAction;
+    OpenLogAction: TAction;
+    ClearLogAction: TAction;
+    BtnsTB: TToolBar;
+    btnAuth: TToolButton;
+    btnSaveParams: TToolButton;
+    btnLoadParams: TToolButton;
+    btnClearParams: TToolButton;
+    ClearParamsAction: TAction;
     procedure BrowserAuthBeforeNavigate2(ASender: TObject;
       const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
       Headers: OleVariant; var Cancel: WordBool);
@@ -43,10 +58,14 @@ type
       const pDisp: IDispatch; const URL: OleVariant);
     procedure NetRequestRequestError(const Sender: TObject;
       const AError: string);
-    procedure AuthBtnClick(Sender: TObject);
     procedure NetRequestRequestCompleted(const Sender: TObject;
       const AResponse: IHTTPResponse);
+    procedure AuthActionExecute(Sender: TObject);
+    procedure ClearParamsActionExecute(Sender: TObject);
+    procedure SaveParamsActionExecute(Sender: TObject);
+    procedure LoadParamsActionExecute(Sender: TObject);
   private
+    { Private declarations }
     FCodeErr: string;
     FMessageErr: string;
     FStatusErr: string;
@@ -57,9 +76,10 @@ type
     Faccess_token: String;
     FlocationRedirect: string;
     Faccount_id: string;
-    { Private declarations }
+    FpathJSONfile: string;
+
     procedure ParseAuth(strJSON: string);
-    procedure GetPropertiesAuth(strAuth: string; CountSymb: integer);
+//    procedure GetPropertiesAuth(strAuth: string; CountSymb: integer);
     procedure Setaccess_token(const Value: String);
     procedure Setaccount_id(const Value: string);
     procedure SetCodeErr(const Value: string);
@@ -72,8 +92,11 @@ type
     procedure SetSuccessRedirectURL(const Value: string);
 
     function SaveHTML(Strings:TStrings; WB: TWebBrowser):boolean;
+    procedure setParamsToProperty(st, at, ex, ac, nc: string);
   public
     { Public declarations }
+    procedure SetpathJSONfile(const Value: string);
+    procedure setParamsToEdit(st, at, ex, ac, nc: string);
 
     published
 //    Параметры redirect_uri при успешной аутентификации
@@ -90,6 +113,8 @@ type
 
       property locationRedirect: string read FlocationRedirect write SetlocationRedirect;
       property SuccessRedirectURL: string read FSuccessRedirectURL write SetSuccessRedirectURL;
+
+      property pathJSONfile: string read FpathJSONfile write SetpathJSONfile;
   end;
 
 var
@@ -101,15 +126,15 @@ implementation
 
 uses Globals, SConsts, BrowserEmulationAdjuster;
 
-procedure TAuthForm.AuthBtnClick(Sender: TObject);
+procedure TAuthForm.AuthActionExecute(Sender: TObject);
 var
   strReq: string;
 begin
   try
-    LogMemo.Lines.Add('Попытка авторизации');
+    LogMemo.Lines.Add('Начат процесс авторизации');
     strReq := Format(AuthURL, [AppKey,
                                DisplayApp,
-                               Expires_at,
+                               s_Expires_at,
                                Nofollow]);
     NetRequest.MethodString := 'GET';
     NetRequest.URL := strReq;
@@ -128,35 +153,50 @@ end;
 
 procedure TAuthForm.BrowserAuthNavigateComplete2(ASender: TObject;
   const pDisp: IDispatch; const URL: OleVariant);
+var
+  st, at, ex, ac, nc: string;
 begin
   try
     SuccessRedirectURL := URL;
-    GetPropertiesAuth(SuccessRedirectURL, Length(SuccessRedirectURL));
+    GetPropertiesAuth(SuccessRedirectURL, Length(SuccessRedirectURL),
+                      st, at, ex,
+                      ac, nc);
+    setParamsToProperty(st, at, ex, ac, nc);
     LogMemo.Lines.Add(URL);
   finally
     LogMemo.Lines.Add('Строка успешной авторизации получена!');
+    setParamsToEdit(st, at, ex, ac, nc);
   end;
 end;
 
-procedure TAuthForm.GetPropertiesAuth(strAuth: string; CountSymb: integer);
+procedure TAuthForm.ClearParamsActionExecute(Sender: TObject);
+var
+  i: integer;
 begin
-    if CountSymb > 0 then
-    try
-       Status := Copy(strAuth, Pos('&status=', strAuth) + Length('&status='), Pos('&access_token=', strAuth) - (Pos('&status=', strAuth) + Length('&status=')));
-       access_token := Copy(strAuth, Pos('&access_token=', strAuth) + Length('&access_token='), Pos('&nickname=', strAuth) - (Pos('&access_token=', strAuth) + Length('&access_token=')));
-       nickname := Copy(strAuth, Pos('&nickname=', strAuth) + Length('&nickname='), Pos('&account_id=', strAuth) - (Pos('&nickname=', strAuth) + Length('&nickname=')));
-       account_id := Copy(strAuth, Pos('&account_id=', strAuth) + Length('&account_id='), Pos('&expires_at=', strAuth) - (Pos('&account_id=', strAuth) + Length('&account_id=')));
-       expires_at := Copy(strAuth, Pos('&expires_at=', strAuth) + Length('&expires_at='), CountSymb - Pos('&expires_at=', strAuth));
-    finally
-       LogMemo.Lines.Add('Получение параметров завершено!');
-       StatusEdit.Text := Status;
-       Access_TokenEdit.Text := access_token;
-       Expires_AtEdit.Text := expires_at;
-       Account_IdEdit.Text := account_id;
-       NicknameEdit.Text := nickname;
+  for i := 0 to ControlCount - 1 do
+    Begin
+      if Controls[i] is TEdit then
+        Begin
+          (Controls[i] as TEdit).Clear;
+        End;
+    End;
+end;
 
-       SetAuthParams(Status, access_token, expires_at, account_id, nickname);   // Передача данных в глобальную запись (record)
-    end;
+procedure TAuthForm.LoadParamsActionExecute(Sender: TObject);
+var
+  sl: TStringList;
+  st, at, ex, ac, nc: string;
+begin
+  try
+    sl := TStringList.Create;
+    sl.LoadFromFile(pathJSONfile);
+    GetPropertiesAuth(sl.Text, Length(sl.Text),
+                      st, at, ex, ac, nc);
+    setParamsToProperty(st, at, ex, ac, nc);
+  finally
+    FreeAndNil(sl);
+    setParamsToEdit(st, at, ex, ac, nc);
+  end;
 end;
 
 procedure TAuthForm.NetRequestRequestCompleted(const Sender: TObject;
@@ -178,10 +218,10 @@ procedure TAuthForm.ParseAuth(strJSON: string);
 var
   JSON: TJSONObject;
 begin
- JSON := JSON.ParseJSONValue(strJSON) as TJSONObject;
+ JSON := TJSONObject.ParseJSONValue(strJSON) as TJSONObject;
 
   try
-    locationRedirect := ((JSON.Get('data').JsonValue as TJSONObject).Get('location')).JsonValue.Value;
+    SetlocationRedirect(((JSON.Get('data').JsonValue as TJSONObject).Get('location')).JsonValue.Value);
   finally
     LogMemo.Lines.Add('-------------------------------------------------------------------------');
     LogMemo.Lines.Add(locationRedirect);
@@ -209,6 +249,21 @@ begin
    finally
     MS.Free;
    end;
+end;
+
+procedure TAuthForm.SaveParamsActionExecute(Sender: TObject);
+var
+  sl: TStringList;
+begin
+  try
+    sl := TStringList.Create;
+    sl.Add(SuccessRedirectURL);
+    LogMemo.Lines.Add(pathJSONfile);
+  finally
+    sl.SaveToFile(pathJSONfile, TEncoding.UTF8);
+    FreeAndNil(sl);
+    LogMemo.Lines.Add('Файл с параметрами успешно сохранен');
+  end;
 end;
 
 procedure TAuthForm.Setaccess_token(const Value: String);
@@ -244,6 +299,33 @@ end;
 procedure TAuthForm.Setnickname(const Value: string);
 begin
   Fnickname := Value;
+end;
+
+procedure TAuthForm.setParamsToEdit(st, at, ex, ac, nc: string);
+begin
+  StatusEdit.Text := IfThen(not st.IsEmpty, st, Status);
+  Access_TokenEdit.Text := IfThen(not at.IsEmpty, at, access_token);
+  Expires_AtEdit.Text := IfThen(not ex.IsEmpty, ex, expires_at);
+  Account_IdEdit.Text := IfThen(not ac.IsEmpty, ac, account_id);
+  NicknameEdit.Text := IfThen(not nc.IsEmpty, nc, nickname);
+end;
+
+procedure TAuthForm.setParamsToProperty(st, at, ex, ac, nc: string);
+begin
+  try
+    SetStatus(st);
+    Setaccess_token(at);
+    Setexpires_at(ex);
+    Setaccount_id(ac);
+    Setnickname(nc);
+  finally
+    LogMemo.Lines.Add('Параметры успешно записаны в свойства')
+  end;
+end;
+
+procedure TAuthForm.SetpathJSONfile(const Value: string);
+begin
+  FpathJSONfile := Value;
 end;
 
 procedure TAuthForm.SetStatus(const Value: string);

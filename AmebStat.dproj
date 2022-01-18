@@ -111,6 +111,24 @@
         </DCCReference>
         <DCCReference Include="SConsts.pas"/>
         <DCCReference Include="Globals.pas"/>
+        <DCCReference Include="Search.pas">
+            <Form>SearchForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Personal.pas">
+            <Form>PersonalForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Garage.pas">
+            <Form>GarageFrame</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="RandomFrame.pas">
+            <Form>RandomFormFrame</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
